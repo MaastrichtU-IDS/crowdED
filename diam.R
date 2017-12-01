@@ -4,18 +4,23 @@ library(plotly)
 data(diamonds, package = "ggplot2")
 nms <- names(diamonds)
 
+setwd("~/crowdsourcing-task-optimization")
+df.simulations <- read.csv('df_simulations.csv', sep=',', encoding="utf-8")
+
+
+
 ui <- fluidPage(
   
-  headerPanel("Diamonds Explorer"),
+  headerPanel("Crowdsourcing"),
   sidebarPanel(
     sliderInput('sampleSize', 'Sample Size', min = 1, max = nrow(diamonds),
                 value = 1000, step = 500, round = 0),
-    selectInput('x', 'X', choices = nms, selected = "carat"),
-    selectInput('y', 'Y', choices = nms, selected = "price"),
+    selectInput('x', 'X', choices = nms, selected = "x"),
+    selectInput('y', 'Y', choices = nms, selected = "y"),
     selectInput('color', 'Color', choices = nms, selected = "clarity"),
     
-    selectInput('facet_row', 'Facet Row', c(None = '.', nms), selected = "clarity"),
-    selectInput('facet_col', 'Facet Column', c(None = '.', nms)),
+    #selectInput('facet_row', 'Facet Row', c(None = '.', nms), selected = "clarity"),
+    #selectInput('facet_col', 'Facet Column', c(None = '.', nms)),
     sliderInput('plotHeight', 'Height of plot (in pixels)', 
                 min = 100, max = 2000, value = 1000)
   ),
@@ -38,8 +43,8 @@ server <- function(input, output) {
       geom_point()
     
     # if at least one facet column/row is specified, add it
-    facets <- paste(input$facet_row, '~', input$facet_col)
-    if (facets != '. ~ .') p <- p + facet_grid(facets)
+    #facets <- paste(input$facet_row, '~', input$facet_col)
+    #if (facets != '. ~ .') p <- p + facet_grid(facets)
     
     ggplotly(p) %>% 
       layout(height = input$plotHeight, autosize=TRUE)
