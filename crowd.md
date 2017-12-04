@@ -56,5 +56,6 @@ https://github.com/Rdatatable/data.table/wiki/Installation
     - Fixed the number of tasks and workers
     - Evaluate the number of workers per task (default = 7)
 
-NO IMPORTA LO QUE PASE TENGO QUE DARLE UN PLOT BONITO
+
+HACER PAQUETE
 
