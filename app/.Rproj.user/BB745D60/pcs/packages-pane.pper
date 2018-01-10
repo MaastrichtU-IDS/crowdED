@@ -1,7 +1,0 @@
-{
-    "installOptions" : {
-        "installDependencies" : true,
-        "installFromRepository" : true,
-        "libraryPath" : "/Users/pedrohserrano/crowdsourcing-task-optimization/app/packrat/lib/x86_64-apple-darwin15.6.0/3.4.2"
-    }
-}

@@ -1,0 +1,10 @@
+name: crowdapp
+title:
+username:
+account: pedrohserrano
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 255479
+bundleId: 1170177
+url: https://pedrohserrano.shinyapps.io/crowdapp/
+when: 1515580795.51392

@@ -1,10 +1,8 @@
-# require(shiny)
 library(shiny)
 library(shinydashboard)
 library(ggthemes)
 library(plotly)
-options(shiny.maxRequestSize=1000*1024^2) 
-
+#options(shiny.maxRequestSize=1000*1024^2) 
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
