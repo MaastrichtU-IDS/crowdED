@@ -15,8 +15,8 @@ shinyServer(function(input, output, session) {
     # } else {
       df_trend <- tabla[tabla$simulation == input$sim, ]
       ggplot(df_trend) +
-        geom_line(aes(x = variable, y = accuracy), colour="blue") + #, by = variable, colour = 'yellow')) +
-        labs(x = "% Training Tasks", y = "% Concesus of Workers", title = "Concensus based on the % of training in stage 1") +
+        geom_line(aes(x = variable, y = accuracy), colour="#0066CC") + #, by = variable, colour = 'yellow')) +
+        labs(x = "% Training Tasks", y = "% Accuracy", title = "Consensus based on the % of Training in Stage 1") +
         #scale_colour_hue("clarity", l = 70, c = 150) + 
         ggthemes::theme_few()
     #}
@@ -29,9 +29,9 @@ shinyServer(function(input, output, session) {
     #   print("Please select at least one country")
     # } else {
     df_trend <- tabla1[tabla1$simulation == input$sim, ]
-    ggplot(df_trend) +
-      geom_line(aes(x = variable, y = accuracy), colour="red") + #, by = variable, colour = 'green')) +
-      labs(x = "Workers per Task", y = "% Concesus of Workers", title = "Concensus based on the Number of Workers doing each Task") +
+    ggplot(df_trend, aes(x = variable, y = accuracy)) +
+      geom_bar(stat="identity") + #, by = variable, colour = 'green')) +
+      labs(x = "Workers per Task", y = "% Accuracy", title = "Consensus based on the Number of Workers doing each Task") +
       #scale_colour_hue("clarity", l = 70, c = 150) + 
       ggthemes::theme_few() 
     #}

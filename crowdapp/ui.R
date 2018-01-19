@@ -3,9 +3,9 @@ library(shinydashboard)
 library(ggthemes)
 library(plotly)
 
-dashboardPage(title = "Crowdsourcing",
-              skin = ("green"),
-              dashboardHeader(title = "Crowdsourcing",
+dashboardPage(title = "CrowdED",
+              skin = ("blue"),
+              dashboardHeader(title = "CrowdED",
                               
                               tags$li(class = "dropdown",
                                       tags$a(href = "http://twitter.com/share?text=Crowdsourcing&Body=You can try yourself", 
@@ -34,6 +34,10 @@ dashboardPage(title = "Crowdsourcing",
                                             href = "https://github.com/pedrohserrano"), 
                                    subtitle = "Data Scientist",
                                    image = "images/pit.png"),
+                  sidebarUserPanel(name = a("Michel D", target = "_blank_",
+                                            href = "https://github.com/micheldumontier"), 
+                                   subtitle = "Distinguished Professor",
+                                   image = "images/michel.png"),
                   hr(),
                   menuItem("Source code", icon = icon("file-code-o"), 
                            href = "https://github.com/pedrohserrano/crowdsourcing-task-optimization"),
