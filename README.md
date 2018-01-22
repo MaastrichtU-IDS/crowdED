@@ -1,7 +1,7 @@
 Task Optimization Algorithm for Crowdsourcing
 ====
 
-Task Assignment Optimization Algorithm in Collaborative Crowdsourcing
+CrowdED: Task Assignment Optimization Algorithm in Crowdsourcing
 
 [CrowdApp](https://pedrohserrano.shinyapps.io/crowdapp/) Beta
 
