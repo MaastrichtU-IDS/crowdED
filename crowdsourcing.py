@@ -35,13 +35,7 @@ good_workers = [worker for worker in set(workers)-set(poor_workers)]
 df_workers = pd.DataFrame()
 df_workers['worker_id'] = workers
 
-label_worker = []
-for i in range(total_workers):
-    if workers[i] in good_workers:
-        label_worker.append('good_worker')
-    else:
-        label_worker.append('poor_worker')
-
+label_worker = ['good_worker' if workers[i] in good_workers else 'poor_worker' for i in range(total_workers)]
 df_workers['label_worker'] = label_worker
 
 # Tasks simulatiom
@@ -56,13 +50,7 @@ df_tasks = pd.DataFrame()
 df_tasks['task_id'] = tasks
 df_tasks['real_answers'] = real_answers
 
-label_task = []
-for i in range(total_tasks):
-    if tasks[i] in hard_tasks:
-        label_task.append('hard_task')
-    else:
-        label_task.append('easy_task')
-
+label_task = ['hard_task' if tasks[i] in hard_tasks else 'easy_task' for i in range(total_tasks)]
 df_tasks['label_task'] = label_task
 
 
@@ -174,16 +162,16 @@ df_workers = pd.merge(workers_mean1.reset_index(), df_workers.drop('prob_worker'
 
 print('Workers Performance Summary: \n{}'.format(df_workers.describe()))
 
-cutoff1 = df_workers['performance'].quantile(.3)
-cutoff2 = df_workers['prob_worker'].quantile(.5)
-print('Cutoff for Performance: {} \nCutoff for Probability: {}'.format(
-    round(cutoff1, 3), round(cutoff2, 3)))
+cutoff_prob = df_workers['prob_worker'].quantile(.5)
+cutoff_perf = df_workers['performance'].quantile(.5)
+print('Cutoff: \n Performance: {} \n Probability: {}'.format(
+    round(cutoff_perf, 3), round(cutoff_prob, 3)))
 
 # ----------------------------------------- Stage 2 - Best workers ----------------------------------------- 
 
 # We are going take only the best workers, it means high probability and high performance, above certain percentile. 
-list_perf = [1 if i > cutoff1 else 0 for i in df_workers['performance']]
-list_prob = [1 if i > cutoff2 else 0 for i in df_workers['prob_worker']]
+list_perf = [1 if i > cutoff_perf else 0 for i in df_workers['performance']]
+list_prob = [1 if i > cutoff_prob else 0 for i in df_workers['prob_worker']]
 
 flag_best_workers = []
 for i in range(len(list_perf)):
