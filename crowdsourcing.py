@@ -6,7 +6,7 @@
 import sys
 import pandas as pd
 import numpy as np
-import shortuuid as uid
+import uuid as ui
 
 # ### Tasks and Workers Dataframe Construction
 #name =  input("Enter your name: ")
@@ -27,7 +27,7 @@ n_poor_workers = int(round(p_poor_workers*total_workers,0))
 print('Good Workers: {} \nPoor Workers: {}'.format(n_good_workers, n_poor_workers))
 
 # Workers simulation
-workers = [uid.ShortUUID().random(length=5) for i in range(total_workers)]
+workers = ['worker_' + str(ui.uuid4())[:4] for i in range(total_workers)]
 poor_workers = [worker for worker in np.random.choice(workers, n_poor_workers, replace=False)]
 good_workers = [worker for worker in set(workers)-set(poor_workers)]
 
@@ -39,16 +39,16 @@ label_worker = ['good_worker' if workers[i] in good_workers else 'poor_worker' f
 df_workers['label_worker'] = label_worker
 
 # Tasks simulatiom
-tasks = ['task_'+uid.ShortUUID().random(length=3) for i in range(total_tasks)]
+tasks = ['task_' + str(ui.uuid4())[:4] for i in range(total_tasks)]
 easy_tasks = [task for task in np.random.choice(tasks, n_easy_tasks, replace=False)]
 hard_tasks = [task for task in set(tasks)-set(easy_tasks)]
 
 answers_key = ["liver", "blood", "lung", "brain", "heart"]
 print('Tasks Answers: {}'.format(answers_key))
-real_answers = [answer for answer in np.random.choice(answers_key, total_tasks)]
+true_answers = [answer for answer in np.random.choice(answers_key, total_tasks)]
 df_tasks = pd.DataFrame()
 df_tasks['task_id'] = tasks
-df_tasks['real_answers'] = real_answers
+df_tasks['true_answers'] = true_answers
 
 label_task = ['hard_task' if tasks[i] in hard_tasks else 'easy_task' for i in range(total_tasks)]
 df_tasks['label_task'] = label_task
@@ -118,7 +118,7 @@ df_tw1['prob_answer'] = 1-(df_tw1['prob_worker']*(1-df_tw1['prob_task']))
 
 # We want to get where is the position of the real_answer column on the answer_key array
 positions = []
-for answer in df_tw1['real_answers']:
+for answer in df_tw1['true_answers']:
     for k in range(len(answers_key)):
         if answers_key[k] == answer:
             positions.append(k)
@@ -140,7 +140,7 @@ worker_answers = [item for answer in worker_answers for item in answer]
 df_tw1['worker_answers'] = worker_answers
 
 #We match the real answers with worker answers
-vec_matches = df_tw1['worker_answers'] == df_tw1['real_answers']
+vec_matches = df_tw1['worker_answers'] == df_tw1['true_answers']
 predict_value =[1 if i == True else 0 for i in vec_matches]
 df_tw1['performance'] = predict_value
 
@@ -274,7 +274,7 @@ df_tw['prob_answer'] = 1-(df_tw['prob_worker']*(1-df_tw['prob_task']))
 
 # We want to get where is the position of the real_answer column on the answer_key array
 positions = []
-for answer in df_tw['real_answers']:
+for answer in df_tw['true_answers']:
     for k in range(len(answers_key)):
         if answers_key[k] == answer:
             positions.append(k)
@@ -295,7 +295,7 @@ for vec in list_vect_probs:
 worker_answers = [item for answer in worker_answers for item in answer]
 df_tw['worker_answers'] = worker_answers
 #We match the real answers with worker answers
-vec_matches = df_tw['worker_answers'] == df_tw['real_answers']
+vec_matches = df_tw['worker_answers'] == df_tw['true_answers']
 predict_value =[1 if i == True else 0 for i in vec_matches]
 df_tw['performance'] = predict_value
 
