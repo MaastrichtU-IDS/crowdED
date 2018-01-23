@@ -9,7 +9,7 @@ import numpy as np
 import shortuuid as uid
 
 # ### Tasks and Workers Dataframe Construction
-name =  input("Enter your name: ")
+#name =  input("Enter your name: ")
 total_tasks =  int(input("Number of Total Tasks: "))  #100
 total_workers = int(input("Number of Total Workers: "))  #40
 
@@ -192,21 +192,25 @@ best_workers = [i for i in df_workers2['worker_id']]
 # - This "rest" of the tasks remain are going to be performed for our final workers
 tasks_mean1 = tasks_mean1.reset_index()
 list_done_tasks = [1 if i > cutoff_task else 0 for i in tasks_mean1['performance']]
+
 tasks_mean1['done_task'] = list_done_tasks
 #All those with value 1 is because was good consensus, so we don't need them to evaluate again
 tasks_mean1[tasks_mean1['done_task']==1]
 done_tasks = tasks_mean1[tasks_mean1['done_task']==1]['task_id']
 done_tasks = [i for i in done_tasks]
-# - Those trained_task with value 1 don't select them
+# - Those
+#  trained_task with value 1 don't select them
 # - The best workers will do the rest of the job
 # - Then we measure the accuracy of the over tasks and workers
 # - Simulations and ploting the acuracy and the best workers, 
 # - Ploting workers converge on truth answer
-print('Tasks already done {} from the total of {}'.format(len(done_tasks), len(df_tasks)))
+print('Number of donde Tasks in Stage 1: {} \n {}'.format(
+    len(done_tasks), done_tasks))
 # Take all the rest of the tasks excluding those that already we have concensus
 # This is the number we want to evaluate in stage 2
 df_tasks2 = df_tasks[~df_tasks['task_id'].isin(done_tasks)]
-print('Tasks to be done: {}'.format(len(df_tasks2)))
+print('Original Tasks: {} \nRemain Tasks for Stage 2: {}'.format(
+    len(df_tasks), len(df_tasks2)))
 
 # ----------------------------------------- Stage 2 - Task Assignation ----------------------------------------- 
 # Before we assigne the best workers to the rest of the tasks we have to be sure that the workers dont responde the same task
@@ -217,8 +221,8 @@ tasks_redo_unique = tasks_redo['task_id'].unique()
 tasks_redo_unique =  [i for i in tasks_redo_unique]
 
 # ** Check Groups: ** All the trained and consensus tasks + All the tasks already done = Trained Tasks
-print(' Done Taks: {} \n Tasks to redo: {} \n Original Tasks to train: {}  \n Value: {}'.format(
-    len(done_tasks), len(tasks_redo_unique), tasks_to_train, len(done_tasks)+len(tasks_redo_unique)==tasks_to_train))
+print(' Matching Tasks Value: {}'.format(
+    len(tasks_redo_unique)==tasks_to_train))
 
 tasks_workers2 = [] #we should take in account that there is a low chance that the worker repat the task
 for i in tasks_redo_unique:
@@ -300,12 +304,12 @@ df_tw['performance'] = predict_value
 tasks_mean = df_tw.groupby('task_id').mean().sort_values('performance', ascending=False)
 final_tasks = tasks_mean[tasks_mean['performance'] >= cutoff_task]['performance']
 
-print('\n \n ==== Agreement on the Tasks ==== \n \n')
+print('\n \n ==== Agreement on the Tasks ==== \n cd \n')
+#print(first_tasks.append(final_tasks).sort_values(ascending=False))
+print('Number of Tasks under consensus n = {}'.format(len(final_tasks)))
 
-print(first_tasks.append(final_tasks).sort_values(ascending=False))
+p_consensus = (len(final_tasks) + len(done_tasks)) / len(df_tasks)
+print('Proportion of Consensus p = {}'.format(p_consensus))
 
-print('Task consensus: {} of {}'.format(len(final_tasks) + len(done_tasks), len(df_tasks)))
-
-accu = (len(first_tasks) + len(final_tasks)) / len(df_tasks)
-
-print('Accuracy Simulation: {}'.format(accu))
+m_consensus = final_tasks.mean()
+print('Accuracy Consensus m = {}'.format(m_consensus))
