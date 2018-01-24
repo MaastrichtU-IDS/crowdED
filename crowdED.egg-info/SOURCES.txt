@@ -1,0 +1,8 @@
+README.md
+crowdED.egg-info/PKG-INFO
+crowdED.egg-info/SOURCES.txt
+crowdED.egg-info/dependency_links.txt
+crowdED.egg-info/not-zip-safe
+crowdED.egg-info/top_level.txt
+crowded/__init__.py
+crowded/method.py
