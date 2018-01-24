@@ -5,4 +5,5 @@ crowdED.egg-info/dependency_links.txt
 crowdED.egg-info/not-zip-safe
 crowdED.egg-info/top_level.txt
 crowded/__init__.py
+crowded/iterate.py
 crowded/method.py

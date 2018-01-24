@@ -250,7 +250,7 @@ class Compute(object):
         tasks_workers3 = []
         for i in tasks_undone_unique:
             tasks_workers3.append(np.random.choice(best_workers, self.workers_per_task, replace=False))
-
+            
         # flat and clean list
         tasks_workers3 = [worker for sublist in tasks_workers3 for worker in sublist]
 
