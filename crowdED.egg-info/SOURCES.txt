@@ -1,4 +1,5 @@
 README.md
+setup.py
 crowdED.egg-info/PKG-INFO
 crowdED.egg-info/SOURCES.txt
 crowdED.egg-info/dependency_links.txt
