@@ -2,7 +2,10 @@ import sys
 import os
 import pandas as pd
 import numpy as np
-import crowded.method as cr
+#import crowded.method as cr
+import sys
+sys.path.insert(0, '/Users/pedrohserrano/crowdED/crowded')
+import method as cr
 
 # coding: utf-8
 
@@ -13,21 +16,21 @@ class Iterate(object):
     def get_accuracy(self, total_tasks=100, total_workers=40, p_hard_t=0.1, p_good_w=0.9,
                      answers_key=["liver", "blood", "lung", "brain", "heart"],
                      p_train_t=0.4, workers_per_task=5):
-        sys.stdout = open(os.devnull, "w")
-        algorithm = cr.Compute(total_tasks, total_workers, p_hard_t, p_good_w, answers_key, p_train_t, workers_per_task)
-        sys.stdout = sys.__stdout__
-        accuracy = algorithm.accuracy()[1]
-        return accuracy
+        accuracy, proportion = [], []
+        for i in range(5): #simulations
+            sys.stdout = open(os.devnull, "w")
+            try:
+                algorithm = cr.Compute(total_tasks, total_workers, p_hard_t, p_good_w, answers_key, p_train_t, workers_per_task)
+            except Exception:
+                pass
+            sys.stdout = sys.__stdout__
+            proportion.append(algorithm.accuracy()[0])
+            accuracy.append(algorithm.accuracy()[1])
 
-    def get_proportion(self, total_tasks=100, total_workers=40, p_hard_t=0.1, p_good_w=0.9,
-                     answers_key=["liver", "blood", "lung", "brain", "heart"],
-                     p_train_t=0.4, workers_per_task=5):
-        sys.stdout = open(os.devnull, "w")
-        algorithm = cr.Compute(total_tasks, total_workers, p_hard_t,
-                               p_good_w, answers_key, p_train_t, workers_per_task)
-        sys.stdout = sys.__stdout__
-        proportion = algorithm.accuracy()[0]
-        return proportion
+        proportion = np.mean(proportion)
+        accuracy = np.mean(accuracy)
+        return accuracy, proportion
+
 
     def train_workers(self, max_value=100):
         results = []
