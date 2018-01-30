@@ -5,9 +5,20 @@ CrowdED: Task Assignment Optimization Algorithm in Crowdsourcing
 
 [CrowdApp](https://pedrohserrano.shinyapps.io/crowdapp/) Beta
 
-## Preliminary results
+## Usage
 
-![](reports/21wpt10iter.png)
-![](reports/100ptrain10iter.png)
-![](reports/100tasks10iter.png)
-![](reports/100workers10iter.png)
+Clone this repo
+
+        git clone https://github.com/pedrohserrano/crowdED.git
+        cd crowdED
+
+Install crowdED
+
+        pip install crowdED
+
+## Preliminary Results
+
+![](reports/Fig1a.png)
+![](reports/Fig1b.png)
+![](reports/Fig3.png)
+![](reports/Fig4.png)
