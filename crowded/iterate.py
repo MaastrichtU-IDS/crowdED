@@ -1,11 +1,15 @@
+"""-----------------------------------------------------------------------------
+  Name: Iterate CrowdED
+  Description: This class is meant to run the crowdsourcing algorithm and get the overall accuracy of certain experiment, it will return two output, the median and the proportion
+  Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl.
+  Date:        30/01/18
+-----------------------------------------------------------------------------"""
+
 import sys
 import os
 import pandas as pd
 import numpy as np
-#import crowded.method as cr
-import sys
-sys.path.insert(0, '/Users/pedrohserrano/crowdED/crowded')
-import method as cr
+import crowded.method as cr
 
 # coding: utf-8
 

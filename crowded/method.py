@@ -1,3 +1,10 @@
+"""-----------------------------------------------------------------------------
+  Name: Method CrowdED
+  Description: This class contains the function that calculates the accuracy of consensus in a crowdsourcing problem, in addition, creates the summary data frame for workers and tasks
+  Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl.
+  Date:        30/01/18
+-----------------------------------------------------------------------------"""
+
 import uuid as ui
 import pandas as pd
 import numpy as np
