@@ -1,7 +1,5 @@
-Task Optimization Algorithm for Crowdsourcing
+CrowdED: Guideline for designing optimal crowdsourcing experiments
 ====
-
-CrowdED: Task Assignment Optimization Algorithm in Crowdsourcing
 
 [CrowdApp](https://pedrohserrano.shinyapps.io/crowdapp/) Beta
 
@@ -17,8 +15,6 @@ Install crowdED
         pip install crowdED
 
 ## Preliminary Results
-
-![](reports/Fig1a.png)
-![](reports/Fig1b.png)
+![](reports/Fig1.png)
 ![](reports/Fig3.png)
 ![](reports/Fig4.png)
