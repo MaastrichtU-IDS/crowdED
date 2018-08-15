@@ -1,8 +1,16 @@
+"""-----------------------------------------------------------------------------
+  Name: Simulate CrowdED
+  Description: This class aims to simulate dummy tasks and workers and its assignation following statistical Bayesian approach
+  Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl)
+  Date:        15/08/18
+-----------------------------------------------------------------------------"""
+
 import sys
+sys.path.insert(0, '/Users/pedrohserrano/crowdED/crowded')
+import key_words as kw
 import numpy as np
 import pandas as pd
 import shortuuid as uid
-from random_words import RandomWords
 from scipy.stats import beta
 
 KEYS = 7
@@ -13,8 +21,6 @@ N = 10
 a = 5
 b = 1
 
-
-
 class Tasks(object):
     def __init__(self, keys=KEYS, length=LEN):
         self.length = length
@@ -24,9 +30,9 @@ class Tasks(object):
         return ['task_' + uid.ShortUUID().random(length=self.length) for i in range(n)]
 
     def _random_words(self):
-        key = RandomWords().random_words(count=self.keys)
+        #words = open("nouns.txt").read().splitlines()
         #print('Generated Random Key: {}\n'.format(key))
-        return key
+        return [i for i in np.random.choice(kw.words(), self.keys, replace=False)]
 
     def _true_answer(self, n=N):
         return [answer for answer in np.random.choice(self._random_words(), n)]

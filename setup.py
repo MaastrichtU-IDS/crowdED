@@ -8,4 +8,5 @@ setup(name='crowdED',
       author_email='p.hernandezserrano@maastrichtuniversity.nl',
       license='MIT',
       packages=['crowded'],
+      include_package_data=True,
       zip_safe=False)
