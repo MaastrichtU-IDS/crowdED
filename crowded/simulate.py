@@ -6,40 +6,56 @@
 -----------------------------------------------------------------------------"""
 
 import sys
-sys.path.insert(0, '/Users/pedrohserrano/crowdED/crowded')
-import key_words as kw
 import numpy as np
 import pandas as pd
 import shortuuid as uid
 from scipy.stats import beta
+import crowded.key_words as kw
 
 KEYS = 7
 HARD = 0.2
 WPT = 3
 LEN = 6
 N = 10
-a = 5
+a = 10
 b = 1
 
 class Tasks(object):
     def __init__(self, keys=KEYS, length=LEN):
+        """
+        :param keys: number of key words for the assessment
+        :type keys: python list or numpy array of any stringable objects
+        :param length: length of the identifier
+        :type length: int
+        """
         self.length = length
         self.keys = keys
 
     def _generate_tasks(self, n=N):
+        """
+        :param n: number of tasks to be generated (default value: 10)
+        :type n: int
+        """
         return ['task_' + uid.ShortUUID().random(length=self.length) for i in range(n)]
 
     def _random_words(self):
-        #words = open("nouns.txt").read().splitlines()
-        #print('Generated Random Key: {}\n'.format(key))
         return [i for i in np.random.choice(kw.words(), self.keys, replace=False)]
 
     def _true_answer(self, n=N):
+        """
+        :param n: number of true answers to be generated (default value: 10)
+        :type n: int
+        """
         return [answer for answer in np.random.choice(self._random_words(), n)]
 
     def create(self, n=N, h=HARD):
+        """
+        :param n: number of tasks to be generated (default value: 10)
+        :type n: int
+        :param h: proportion of hard tasks a priori selected for the experiment (default value: 0.2)
+        :type h: float
+        """
         e = 1 - h
-        # ; print('Percentage of Hard Tasks: {}'.format(HARD))
         cut_tasks = 0.75
         tasks = self._generate_tasks(n)
         probs_tasks = []
@@ -47,18 +63,15 @@ class Tasks(object):
             tasks, int(round(e * n, 0)), replace=False)]
         hard_tasks = [task for task in set(tasks) - set(easy_tasks)]
         df = pd.DataFrame()
-        #df['task_id'] = tasks
         df['true_answers'] = self._true_answer(n)
         df.index = tasks
         df['label_task'] = ['hard_task' if tasks[i]
                             in hard_tasks else 'easy_task' for i in range(n)]
         for i in df['label_task']:
             if i == 'easy_task':  # uniform from .75 to 1
-                # a random number form cut to 1
                 probs_tasks.append(np.random.choice(
                     (np.arange(cut_tasks, 1, 0.01)), 1))
             elif i == 'hard_task':  # uniform from .5 to .75
-                # a random number form chance to cut
                 probs_tasks.append(np.random.choice(
                     (np.arange(0.5, cut_tasks, 0.01)), 1))
             else:
@@ -68,10 +81,16 @@ class Tasks(object):
         return df
 
 
-
-
 class Workers(object):
     def __init__(self, alpha=a, beta=b, length=LEN):
+        """
+        :param alpha: parameter alpha of a beta distribution (default value: 10)
+        :type alpha: float
+        :param beta: parameter beta of a beta distribution (default value: 1)
+        :type beta: float
+        :param length: number of workers to be created (default value:10)
+        :type length: type
+        """
         self.length = length
         self.alpha = alpha
         self.beta = beta
@@ -81,8 +100,6 @@ class Workers(object):
             {'prob_worker': beta.rvs(self.alpha, self.beta, size=n)})
         df.index = [uid.ShortUUID().random(self.length) for i in range(n)]
         return df
-
-
 
 
 class AssignTasks(object):

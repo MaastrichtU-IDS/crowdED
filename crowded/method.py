@@ -1,3 +1,10 @@
+"""-----------------------------------------------------------------------------
+  Name: Method CrowdED
+  Description: This class aims to compute a conditional probability and simulate answers in a crowdsourcing experiment
+  Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl)
+  Date:        15/08/18
+-----------------------------------------------------------------------------"""
+
 import sys
 import pandas as pd
 import numpy as np
