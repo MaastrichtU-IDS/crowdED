@@ -9,14 +9,14 @@ import crowded.make as mk
 from pycm import *
 import pandas as pd
 
-tasks = [60, 80, 100, 120, 140]
-workers = [30, 40,50,60,70,80,90,100]
-hard_t = [0.2, 0.4, 0.6, 0.8]
-prop = [0.2, 0.4, 0.6, 0.8]
-wpt = [3, 5, 7, 9]
-key = [3, 5, 7]
-alpha = [3, 6, 9]
-
+tasks = [i for i in range(500)]
+workers = [i for i in range(500)]
+hard_t = [i / 100 for i in range(100)]
+prop = [i / 100 for i in range(100)]
+wpt = [i for i in range(20) if i % 2 == 1]
+key = [i for i in range(20) if i % 2 == 1]
+alpha = [i for i in range(20)]
+#5,000,000,000,000
 
 def _combinations(tasks, workers, hard_t, prop, wpt, key, alpha):
     table = []
@@ -48,4 +48,5 @@ simulations = pd.DataFrame(get_accuracy(
     tasks, workers, hard_t, prop, wpt, key, alpha)).fillna(0)
 simulations.columns = ['total_tasks', 'total_workers', 'proportion_hard_tasks','proportion_train_tasks', 'workers_per_task', 'total_keys','alpha', 'accuracy']
 sttime = datetime.now().strftime('%Y%m%d_%H:%M - ')
+
 simulations.to_csv('data/' + str(sttime)+'simulations.csv', index=False)
