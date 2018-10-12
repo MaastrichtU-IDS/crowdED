@@ -13,12 +13,13 @@ from scipy.stats import beta
 import crowded.key_words as kw
 
 KEYS = 7
-HARD = 0.2
+HARD = 0.3
 WPT = 3
-LEN = 6
+LEN = 12 #Default parameter for the lenght of the unique identifier generated
 N = 10
-a = 10
-b = 1
+#Default values means the number of succes and fails in the beta distribution is uniform
+a = 28
+b = 3
 
 class Tasks(object):
     def __init__(self, keys=KEYS, length=LEN):
@@ -56,7 +57,7 @@ class Tasks(object):
         :type h: float
         """
         e = 1 - h
-        cut_tasks = 0.75
+        cut_tasks = 0.5
         tasks = self._generate_tasks(n)
         probs_tasks = []
         easy_tasks = [task for task in np.random.choice(
@@ -73,7 +74,7 @@ class Tasks(object):
                     (np.arange(cut_tasks, 1, 0.01)), 1))
             elif i == 'hard_task':  # uniform from .5 to .75
                 probs_tasks.append(np.random.choice(
-                    (np.arange(0.5, cut_tasks, 0.01)), 1))
+                    (np.arange(0, cut_tasks, 0.01)), 1))
             else:
                 probs_tasks.append(1)
 
@@ -84,9 +85,9 @@ class Tasks(object):
 class Workers(object):
     def __init__(self, alpha=a, beta=b, length=LEN):
         """
-        :param alpha: parameter alpha of a beta distribution (default value: 10)
+        :param alpha: parameter alpha of a beta distribution (default value: 28)
         :type alpha: float
-        :param beta: parameter beta of a beta distribution (default value: 1)
+        :param beta: parameter beta of a beta distribution (default value: 3)
         :type beta: float
         :param length: number of workers to be created (default value:10)
         :type length: type
