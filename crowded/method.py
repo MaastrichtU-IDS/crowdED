@@ -50,26 +50,27 @@ class WorkerAnswer(object):
 
         return answers
 
+
 IDX = 'worker_id'
 
 class Performance(object):
     def __init__(self, df_tw):
+        """
+        :df_tw: dataframe of assigned tasks to workers
+        """
         self.df_tw = df_tw
 
     def _agg(self):
         df = self.df_tw.groupby(IDX).agg('count')['task_id']
-        df.name = 'tasks'
+        df.index.name = 'tasks'
         return df
 
     def _workers(self):
         df = self.df_tw.groupby(self.df_tw[IDX]).mean(
         ).sort_values('performance', ascending=False)
-        df['worker_hability'] = ['good_worker' if i ==
-                                 1 else 'poor_worker' for i in df['performance']]
-        return df.join(self._agg(), on=IDX, how='left')
+        df['worker_hability'] = ['good_worker' if i == 1 else 'poor_worker' for i in df['performance']]
+        return df.reset_index().join(self._agg(), on=IDX, how='left')
 
     def good_workers(self):
-        _good = self._workers()[(self._workers()['worker_hability'] == 'good_worker') & ((self._workers()[
-            'prob_task'] < self._workers()['prob_task'].median()))]  # & ((df['tasks'] > df['tasks'].median()))]
-        #print('Selected Good Workers: {}'.format(good_workers['performance'].sum()))
+        _good = self._workers()[(self._workers()['worker_hability'] == 'good_worker') & ((self._workers()['prob_task'] < self._workers()['prob_task'].median()))]
         return [i for i in _good.index]

@@ -64,8 +64,8 @@ class Tasks(object):
             tasks, int(round(e * n, 0)), replace=False)]
         hard_tasks = [task for task in set(tasks) - set(easy_tasks)]
         df = pd.DataFrame()
+        df['task_id'] = tasks
         df['true_answers'] = self._true_answer(n)
-        df.index = tasks
         df['label_task'] = ['hard_task' if tasks[i]
                             in hard_tasks else 'easy_task' for i in range(n)]
         for i in df['label_task']:
@@ -98,13 +98,21 @@ class Workers(object):
 
     def create(self, n=N):
         df = pd.DataFrame(
-            {'prob_worker': beta.rvs(self.alpha, self.beta, size=n)})
-        df.index = [uid.ShortUUID().random(self.length) for i in range(n)]
+            {'worker_id': [uid.ShortUUID().random(self.length) for i in range(n)],
+             'prob_worker': beta.rvs(self.alpha, self.beta, size=n)})
         return df
 
 
 class AssignTasks(object):
     def __init__(self, tasks, workers, wpt=WPT):
+        """
+        :param tasks: table created usings Tasks().create() object
+        :type tasks: pandas dataframe
+        :param workers: table created using Workers().create object
+        :type workers: pandas dataframe
+        :param wpt: number of workers per task for the simulation
+        "param type: integer
+        """
         self.wpt = wpt
         self.tasks = tasks
         self.workers = workers
@@ -123,8 +131,6 @@ class AssignTasks(object):
     def create(self):
         df = pd.DataFrame({'task_id': self._task_asssign(),
                            'worker_id': self._worker_assign()})
-        df = pd.merge(df, self.tasks, left_on='task_id',
-                      right_index=True, how='left')
-        df = pd.merge(df, self.workers, left_on='worker_id',
-                      right_index=True, how='left')
+        df = pd.merge(df, self.tasks, on='task_id', how='left')
+        df = pd.merge(df, self.workers, on='worker_id', how='left')
         return df
