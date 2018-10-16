@@ -24,7 +24,7 @@ b = 3
 class Tasks(object):
     def __init__(self, keys=KEYS, length=LEN):
         """
-        :param keys: number of key words for the assessment
+        :param keys: number of valid answers expected to be assessed
         :type keys: python list or numpy array of any stringable objects
         :param length: length of the identifier
         :type length: int
@@ -69,16 +69,17 @@ class Tasks(object):
         df['label_task'] = ['hard_task' if tasks[i]
                             in hard_tasks else 'easy_task' for i in range(n)]
         for i in df['label_task']:
-            if i == 'easy_task':  # uniform from .75 to 1
+            if i == 'easy_task':  # uniform from .5 to 1
                 probs_tasks.append(np.random.choice(
                     (np.arange(cut_tasks, 1, 0.01)), 1))
-            elif i == 'hard_task':  # uniform from .5 to .75
+            elif i == 'hard_task':  # uniform from .0 to .5
                 probs_tasks.append(np.random.choice(
-                    (np.arange(0, cut_tasks, 0.01)), 1))
+                    (np.arange(0.01, cut_tasks, 0.01)), 1))
             else:
                 probs_tasks.append(1)
 
         df['prob_task'] = [item for prob in probs_tasks for item in prob]
+        df.index = df['task_id']
         return df
 
 
@@ -100,6 +101,7 @@ class Workers(object):
         df = pd.DataFrame(
             {'worker_id': [uid.ShortUUID().random(self.length) for i in range(n)],
              'prob_worker': beta.rvs(self.alpha, self.beta, size=n)})
+        df.index = df['worker_id']
         return df
 
 

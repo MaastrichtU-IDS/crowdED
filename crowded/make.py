@@ -2,7 +2,9 @@ import time, sys
 import crowded.simulate as cs
 import crowded.method as cm
 
-def tasks_split(df, p=.3):
+PTT = .3
+
+def tasks_split(df, p=PTT):
     _train = df.sample(frac=p, random_state=23)
     _rest = df.loc[df.index.difference(_train.index)]
     return _train, _rest
@@ -17,24 +19,32 @@ def _update_progress(job_title, progress):
     sys.stdout.write(msg)
     sys.stdout.flush()
 
-def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=10, b=1):
+
+def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=28, b=3):
+    #Defining the experiment parameters
     df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
-    workers = cs.Workers(a,b).create(total_workers)
+    workers = cs.Workers(a, b).create(total_workers)
     keys = df_tasks['true_answers'].unique()
+    df_tasks.index = df_tasks['task_id']
+    workers.index = workers['worker_id']
     tasks_train, tasks_rest = tasks_split(df_tasks, ptt)
+    #Compute Method for Training set
     df_tw = cs.AssignTasks(tasks_train, workers, wpt).create()
     cp = cm.ComputeProbability(df_tw['prob_task'], df_tw['prob_worker'], keys)
     df_tw['worker_answers'] = cm.WorkerAnswer(
-        cp.predict(), df_tw['true_answers'], keys).match()
+        df_tw['true_answers'], cp.predict(), keys).match()
     df_tw['performance'] = cp.predict()
+    #Select the good workers from training phase
     perf = cm.Performance(df_tw)
     good_workers = workers.loc[perf.good_workers()]
+    #Compute Method for the rest of the set
     df_tw_2 = cs.AssignTasks(tasks_rest, good_workers, wpt).create()
     cp2 = cm.ComputeProbability(
         df_tw_2['prob_task'], df_tw_2['prob_worker'], keys)
     df_tw_2['worker_answers'] = cm.WorkerAnswer(
-        cp2.predict(), df_tw_2['true_answers'], keys).match()
+        df_tw_2['true_answers'], cp2.predict(), keys).match()
     df_tw_2['performance'] = cp2.predict()
+    #Append two sets in one final set
     df = df_tw.append(df_tw_2)
     return df
 

@@ -14,27 +14,6 @@ import simulate as cs
 import method as cm
 import make as mk
 
-
-
-#tasks = [i for i in range(500)]
-#workers = [i for i in range(500)]
-#hard_t = [i / 100 for i in range(100)]
-#prop = [i / 100 for i in range(100)]
-#wpt = [i for i in range(20) if i % 2 == 1]
-#key = [i for i in range(20) if i % 2 == 1]
-#alpha = [i for i in range(20)]
-#5,000,000,000,000
-
-#tasks = [60,80,100,120,140,160,180,200]
-#workers = [30,40,50,60,70,80,90,100]
-#hard_t = [0.2, 0.4, 0.6, 0.8]
-#prop = [0.2, 0.4, 0.6, 0.8]
-#wpt = [3, 5, 7, 9, 11]
-#key = [3, 5, 7]
-#alpha = from 25 to 30
-#beta = from 1 to 5
-#the ratio b/a is always 0.104166
-
 tasks = [60, 100, 140]
 workers = [30, 50, 80, 100]
 hard_t = [0.2, 0.8]
