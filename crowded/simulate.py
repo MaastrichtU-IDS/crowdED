@@ -80,6 +80,7 @@ class Tasks(object):
 
         df['prob_task'] = [item for prob in probs_tasks for item in prob]
         df.index = df['task_id']
+        df.index.name = 'id'
         return df
 
 
@@ -102,6 +103,7 @@ class Workers(object):
             {'worker_id': [uid.ShortUUID().random(self.length) for i in range(n)],
              'prob_worker': beta.rvs(self.alpha, self.beta, size=n)})
         df.index = df['worker_id']
+        df.index.name = 'id'
         return df
 
 
@@ -122,12 +124,12 @@ class AssignTasks(object):
     def _worker_assign(self):
         if self.wpt > len(self.workers):
             raise Exception(
-                'Number of workers per task must be smaller than the number of workers!')
+                'Number of workers per task must be smaller than the number of workers. Please re-run')
         return [worker for i in [np.random.choice(self.workers.index, self.wpt, replace=False) for task in self.tasks.index] for worker in i]
 
     def _task_asssign(self):
         if self.wpt % 2 == 0:
-            raise Exception('Number of workers per task must be odd!')
+            raise Exception('Number of workers per task must be odd. Please re-run')
         return [item for k in [[self.tasks.index[i]] * self.wpt for i in range(len(self.tasks.index))] for item in k]
 
     def create(self):

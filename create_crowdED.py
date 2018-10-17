@@ -34,24 +34,27 @@ def _combinations(tasks, workers, hard_t, prop, wpt, key):
     return table
 
 
-def get_accuracy(tasks, workers, hard_t, prop, wpt, key):
+def simulate_scenarios(tasks, workers, hard_t, prop, wpt, key, stages=2):
     sim = _combinations(tasks, workers, hard_t, prop, wpt, key)
-    for idx, l in enumerate(sim):
-        mk._update_progress("CrowdED simulation", idx / len(sim))
+    for idx, row in enumerate(sim):
+        mk._update_progress("CrowdED simulation", (idx + 1) / len(sim))
         try:
-            df = mk.crowd_table(total_tasks=l[0], total_workers=l[1], p_hard_tasks=l[2], ptt=l[3], wpt=l[4], nk=l[5])
-            mat = ConfusionMatrix(df['true_answers'].tolist(), df['worker_answers'].tolist())
-            l.insert(6, round(mat.Overall_ACC, 4))
-            l.insert(7, round(mat.CrossEntropy, 4))
-            l.insert(8, round(sum([i for i in cm.F1.values()]) / len([i for i in cm.F1.values()]), 4))
+            if stages == 2:
+                df = mk.crowd_table(total_tasks=sim[idx][0], total_workers=sim[idx][1], p_hard_tasks=sim[idx][2], ptt=sim[idx][3], wpt=sim[idx][4], nk=sim[idx][5])
+            else:
+                df = mk.crowd_table_one_stage(total_tasks=sim[idx][0], total_workers=sim[idx][1], p_hard_tasks=sim[idx][2], ptt=sim[idx][3], wpt=sim[idx][4], nk=sim[idx][5])
+            mat = ConfusionMatrix(df['true_answers'].tolist(),df['worker_answers'].tolist())
+            sim[idx].insert(6, round(mat.Overall_ACC, 4))
+            sim[idx].insert(7, round(mat.CrossEntropy, 4))
+            sim[idx].insert(8, round(sum([i for i in mat.F1.values()]) / len([i for i in mat.F1.values()]), 4))
         except Exception:
             pass
     return sim
 
 
-simulations = pd.DataFrame(get_accuracy(
-    tasks, workers, hard_t, prop, wpt, key)).fillna(0)
+simulations = pd.DataFrame(simulate_scenarios(tasks, workers, hard_t, prop, wpt, key, 1)).fillna(0)
 simulations.columns = ['total_tasks', 'total_workers', 'proportion_hard_tasks','proportion_train_tasks', 'workers_per_task', 'total_keys','accuracy','cross_entropy','f1']
 sttime = datetime.now().strftime('%Y%m%d_%H:%M - ')
-
 simulations.to_csv('data/' + str(sttime)+'simulations.csv', index=False)
+
+

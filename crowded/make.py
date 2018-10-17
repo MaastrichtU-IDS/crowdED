@@ -1,6 +1,8 @@
 import time, sys
-import crowded.simulate as cs
-import crowded.method as cm
+#import crowded.simulate as cs
+#import crowded.method as cm
+import simulate as cs
+import method as cm
 
 PTT = .3
 
@@ -25,8 +27,6 @@ def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt
     df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
     workers = cs.Workers(a, b).create(total_workers)
     keys = df_tasks['true_answers'].unique()
-    df_tasks.index = df_tasks['task_id']
-    workers.index = workers['worker_id']
     tasks_train, tasks_rest = tasks_split(df_tasks, ptt)
     #Compute Method for Training set
     df_tw = cs.AssignTasks(tasks_train, workers, wpt).create()
@@ -48,5 +48,17 @@ def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt
     df = df_tw.append(df_tw_2)
     return df
 
+def crowd_table_one_stage(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=28, b=3):
+    #Defining the experiment parameters
+    df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
+    workers = cs.Workers(a, b).create(total_workers)
+    keys = df_tasks['true_answers'].unique()
+    #Compute Method
+    df_tw = cs.AssignTasks(df_tasks, workers, wpt).create()
+    cp = cm.ComputeProbability(df_tw['prob_task'], df_tw['prob_worker'], keys)
+    df_tw['worker_answers'] = cm.WorkerAnswer(
+        df_tw['true_answers'], cp.predict(), keys).match()
+    df_tw['performance'] = cp.predict()
+    return df_tw
 
 

@@ -12,6 +12,11 @@ from scipy.stats import bernoulli
 
 class ComputeProbability(object):
     def __init__(self, series1, series2, keys, size=1):
+        """
+        series1 = vector of probabilities (tasks)
+        series1 = vector of probabilities (workers)
+        key = vector of odd number of strings
+        """
         self.size = size
         self.series1 = series1
         self.series2 = series2
@@ -69,8 +74,8 @@ class Performance(object):
     def _workers(self):
         df = self.df_tw.groupby(self.df_tw[IDX]).mean(
         ).sort_values('performance', ascending=False)
-        df['worker_ability'] = ['good_worker' if i >= df['performance'].mean(
-        ) else 'poor_worker' for i in df['performance']]
+        #df['worker_ability'] = ['good_worker' if i >= df['performance'].mean() else 'poor_worker' for i in df['performance']]
+        df['worker_ability'] = ['good_worker' if i == 1 else 'poor_worker' for i in df['performance']]
         return df.reset_index().join(self._agg(), on=IDX, how='left')
 
     def good_workers(self):
