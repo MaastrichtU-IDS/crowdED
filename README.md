@@ -20,7 +20,7 @@ pip install crowdED
 
 Installing from source **(Optional)**
 ```shell
-git clone https://github.com/pedrohserrano/crowdED.git
+git clone https://github.com/MaastrichtU-IDS/crowdED.git
 cd crowdED
 pip install --editable ./
 ```
