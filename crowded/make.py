@@ -1,8 +1,6 @@
 import time, sys
-#import crowded.simulate as cs
-#import crowded.method as cm
-import simulate as cs
-import method as cm
+import crowded.simulate as cs
+import crowded.method as cm
 
 PTT = .3
 
