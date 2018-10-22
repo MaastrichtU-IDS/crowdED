@@ -16,7 +16,7 @@ import make as mk
 
 tasks = [60,80,100,120,140,160,180,200,220,240,260,280,300]
 workers = [30,40,50,60,70,80,90,100]
-hard_t = [0.2, 0.4, 0.6, 0.8]
+hard_t = [0, 0.2, 0.4, 0.6, 0.8, 1]
 prop = [0.2, 0.4, 0.6, 0.8]
 wpt = [3, 5, 7, 9, 11]
 key = [3, 5, 7]
@@ -52,7 +52,7 @@ def simulate_scenarios(tasks, workers, hard_t, prop, wpt, key, stages=2):
     return sim
 
 
-simulations = pd.DataFrame(simulate_scenarios(tasks, workers, hard_t, prop, wpt, key, 1)).fillna(0)
+simulations = pd.DataFrame(simulate_scenarios(tasks, workers, hard_t, prop, wpt, key, 2)).fillna(0)
 simulations.columns = ['total_tasks', 'total_workers', 'proportion_hard_tasks','proportion_train_tasks', 'workers_per_task', 'total_keys','accuracy','cross_entropy','f1']
 sttime = datetime.now().strftime('%Y%m%d_%H:%M - ')
 simulations.to_csv('data/' + str(sttime)+'simulations.csv', index=False)
