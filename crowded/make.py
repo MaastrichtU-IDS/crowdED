@@ -1,3 +1,10 @@
+"""-----------------------------------------------------------------------------
+  Name: Make CrowdED
+  Description: This class aims to simulate the whole pipeline within different scenarios
+  Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl)
+  Last Update: 23/08/18
+-----------------------------------------------------------------------------"""
+
 import time, sys
 import crowded.simulate as cs
 import crowded.method as cm
@@ -20,7 +27,7 @@ def _update_progress(job_title, progress):
     sys.stdout.flush()
 
 
-def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=28, b=3):
+def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=25, b=5):
     #Defining the experiment parameters
     df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
     workers = cs.Workers(a, b).create(total_workers)
@@ -34,9 +41,9 @@ def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt
     df_tw['performance'] = cp.predict()
     #Select the good workers from training phase
     perf = cm.Performance(df_tw)
-    good_workers = workers.loc[perf.good_workers()]
+    trained_workers = perf.trained_workers()
     #Compute Method for the rest of the set
-    df_tw_2 = cs.AssignTasks(tasks_rest, good_workers, wpt).create()
+    df_tw_2 = cs.AssignTasks(tasks_rest, trained_workers, wpt).create()
     cp2 = cm.ComputeProbability(
         df_tw_2['prob_task'], df_tw_2['prob_worker'], keys)
     df_tw_2['worker_answers'] = cm.WorkerAnswer(
@@ -46,7 +53,7 @@ def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt
     df = df_tw.append(df_tw_2)
     return df
 
-def crowd_table_one_stage(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=28, b=3):
+def crowd_table_one_stage(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=25, b=5):
     #Defining the experiment parameters
     df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
     workers = cs.Workers(a, b).create(total_workers)

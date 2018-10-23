@@ -3,23 +3,18 @@ Naive brute force simulations generator, use with care, could take too long
 """
 import sys
 from datetime import datetime
-#import crowded.simulate as cs
-#import crowded.method as cm
-#import crowded.make as mk
+import crowded.simulate as cs
+import crowded.method as cm
+import crowded.make as mk
 from pycm import *
 import pandas as pd
-import sys
-sys.path.insert(0, '/Users/pedrohserrano/crowdED/crowded')
-import simulate as cs
-import method as cm
-import make as mk
 
-tasks = [60,80,100,120,140,160,180,200,220,240,260,280,300]
+tasks = [60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380,400]
 workers = [30,40,50,60,70,80,90,100]
 hard_t = [0, 0.2, 0.4, 0.6, 0.8, 1]
 prop = [0.2, 0.4, 0.6, 0.8]
-wpt = [3, 5, 7, 9, 11]
-key = [3, 5, 7]
+wpt = [3, 5, 7, 9, 11, 13, 15]
+key = [3, 5, 7, 11, 13, 15]
 
 
 def _combinations(tasks, workers, hard_t, prop, wpt, key):

@@ -2,7 +2,7 @@
   Name: Simulate CrowdED
   Description: This class aims to simulate dummy tasks and workers and its assignation following statistical Bayesian approach
   Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl)
-  Date:        15/08/18
+  Date:        23/08/18
 -----------------------------------------------------------------------------"""
 
 import sys

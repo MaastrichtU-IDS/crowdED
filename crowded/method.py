@@ -2,20 +2,20 @@
   Name: Method CrowdED
   Description: This class aims to compute a conditional probability and simulate answers in a crowdsourcing experiment
   Created By:  Pedro V (p.hernandezserrano@maastrichtuniversity.nl)
-  Last Update:        15/08/18
+  Last Update: 23/08/18
 -----------------------------------------------------------------------------"""
 
 import sys
 import pandas as pd
 import numpy as np
-from scipy.stats import bernoulli
+from scipy.stats import bernoulli, beta
 
 class ComputeProbability(object):
     def __init__(self, series1, series2, keys, size=1):
         """
-        series1 = vector of probabilities (tasks)
-        series1 = vector of probabilities (workers)
-        key = vector of odd number of strings
+        :series1: vector of probabilities (tasks)
+        :series2: vector of probabilities (workers)
+        :key: vector of odd number of strings
         """
         self.size = size
         self.series1 = series1
@@ -38,9 +38,9 @@ class ComputeProbability(object):
 class WorkerAnswer(object):
     def __init__(self, series1, series2, keys):
         """
-        series1 = vector of true answers
-        series2 = vector of 1 and 0
-        key = vector of odd number of strings
+        :series1: vector of true answers
+        :series2: vector of 1 and 0
+        :key: vector of odd number of strings
         """
         self.series1 = series1
         self.series2 = series2
@@ -74,11 +74,26 @@ class Performance(object):
     def _workers(self):
         df = self.df_tw.groupby(self.df_tw[IDX]).mean(
         ).sort_values('performance', ascending=False)
-        #df['worker_ability'] = ['good_worker' if i >= df['performance'].mean() else 'poor_worker' for i in df['performance']]
-        df['worker_ability'] = ['good_worker' if i == 1 else 'poor_worker' for i in df['performance']]
+        df['worker_ability'] = ['good_worker' if i >= df['performance'].mean() else 'poor_worker' for i in df['performance']]
+        #df['worker_ability'] = ['good_worker' if i == 1 else 'poor_worker' for i in df['performance']]
         return df.reset_index().join(self._agg(), on=IDX, how='left')
 
     def good_workers(self):
         _good = self._workers()[(self._workers()['worker_ability'] == 'good_worker') & (
             (self._workers()['prob_task'] < self._workers()['prob_task'].median()))]
         return [i for i in _good[IDX]]
+
+    def trained_workers(self):
+        _w = self._workers()
+        _w.index = _w['worker_id']
+        dfw = _w.loc[self.good_workers()]
+        dfw['alpha'] = round(dfw['performance'] * dfw['task_id'], 0)
+        dfw['beta'] = dfw['task_id'] - dfw['alpha']
+        dfw['alpha'] = [int(i + 28) for i in dfw['alpha']]
+        dfw['beta'] = 1#[int(i + 1) for i in dfw['beta']]
+        df = pd.DataFrame(
+            {'worker_id': self.good_workers(),
+             'prob_worker': [beta.rvs(a, b, size=1)[0] for a, b in zip(dfw['alpha'], dfw['beta'])]})
+        df.index = df['worker_id']
+        df.index.name = 'id'
+        return df
