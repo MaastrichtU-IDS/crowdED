@@ -30,7 +30,9 @@ pip install --editable ./
 ## Examples
 
 Create a synthetic dataset of tasks
-#You will need to run !pip install shortuuid
+
+You will need to run ```!pip install shortuuid```
+
 ```python
 import crowded.simulate as cs
 
@@ -117,7 +119,9 @@ print(cm.Overall_ACC, cm.matrix())
 ```
 
 Compute the crowdED methodology to get accuracy of workers and tasks selection on two stages
-#You will need to run !pip install pycm
+
+You will need to run ```!pip install pycm```
+
 ```python
 import crowded.make as mk
 from pycm import *
