@@ -31,6 +31,8 @@ pip install --editable ./
 
 Create a synthetic dataset of tasks
 
+You will need to run ```!pip install shortuuid```
+
 ```python
 import crowded.simulate as cs
 
@@ -53,7 +55,7 @@ total_workers = 40
 alpha = 28
 beta = 2
 #create task dataset
-df_workers = Workers(alpha, beta).create(total_workers)
+df_workers = cs.Workers(alpha, beta).create(total_workers)
 ```
 
 Assign easily and fairly workers to tasks
@@ -64,21 +66,21 @@ import crowded.simulate as cs
 #workers per task should always be smaller than the number of workers
 wpt = 5 
 #create assignment
-df_tw = AssignTasks(df_tasks, df_workers, wpt).create()
+df_tw = cs.AssignTasks(df_tasks, df_workers, wpt).create()
 ```
 
 Compute Bayes probability and predict worker answers 
 
 ```python
-import crowded.method as cm
+import crowded.method as cs
 
 #workers per task should always be smaller than the number of workers
 wpt = 5 
 #create assignment
-df_tw = AssignTasks(df_tasks, df_workers, wpt).create()
+df_tw = cs.AssignTasks(df_tasks, df_workers, wpt).create()
 ```
 
-Compute Bayes probability
+Compute Bayes probability and Predict answers of the workers
 
 ```python
 import crowded.method as cm
@@ -90,8 +92,6 @@ z = df_tasks['true_answers'].unique()  #vector of valid answers in the experimen
 #compute probability
 cp = cm.ComputeProbability(x, y, z)
 ```
-
-Predict answers of the workers
 
 ```python
 import crowded.method as cm
@@ -120,17 +120,19 @@ print(cm.Overall_ACC, cm.matrix())
 
 Compute the crowdED methodology to get accuracy of workers and tasks selection on two stages
 
+You will need to run ```!pip install pycm```
+
 ```python
 import crowded.make as mk
 from pycm import *
 
-total_tasks=415, 
-total_workers=40, 
-proportion_of_hard_tasks=0.4, 
-proportion_of_tasks_to_train=0.3, 
-workers_per_task=5, 
-number_of_valid_answers =3, 
-alpha=28, 
+total_tasks=415 
+total_workers=40 
+proportion_of_hard_tasks=0.4
+proportion_of_tasks_to_train=0.3
+workers_per_task=5
+number_of_valid_answers =3
+alpha=28
 beta=3
 
 df = mk.crowd_table(total_tasks, 
