@@ -27,7 +27,7 @@ def _update_progress(job_title, progress):
     sys.stdout.flush()
 
 
-def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=25, b=5):
+def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=1, ptt=.3, wpt=5, nk=5, a=7.6, b=3.3):
     #Defining the experiment parameters
     df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
     workers = cs.Workers(a, b).create(total_workers)
@@ -53,7 +53,7 @@ def crowd_table(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt
     df = df_tw.append(df_tw_2)
     return df
 
-def crowd_table_one_stage(total_tasks=100, total_workers=30, p_hard_tasks=0.4, ptt=.3, wpt=5, nk=5, a=25, b=5):
+def crowd_table_one_stage(total_tasks=100, total_workers=30, p_hard_tasks=1, ptt=.3, wpt=5, nk=5, a=7.6, b=3.3):
     #Defining the experiment parameters
     df_tasks = cs.Tasks(nk).create(total_tasks, p_hard_tasks)
     workers = cs.Workers(a, b).create(total_workers)

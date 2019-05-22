@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='crowdED',
-      version='0.1.3',
+      version='0.1.4',
       description='This package contains the methods to generate simulated workers and tasks of a crowdsourcing use case',
       url='https://github.com/MaastrichtU-IDS/crowdED',
       author='Pedro V Hernandez Serrano',

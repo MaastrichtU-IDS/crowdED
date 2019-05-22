@@ -13,13 +13,13 @@ from scipy.stats import beta
 import crowded.key_words as kw
 
 KEYS = 7
-HARD = 0.3
+HARD = 1
 WPT = 3
 LEN = 12 #Default parameter for the lenght of the unique identifier generated
 N = 10
 #Default values means the number of succes and fails in the beta distribution is uniform
-a = 28
-b = 3
+a = 7.6
+b = 3.3
 
 class Tasks(object):
     def __init__(self, keys=KEYS, length=LEN):
